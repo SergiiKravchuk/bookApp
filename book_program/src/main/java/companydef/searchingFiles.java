@@ -11,46 +11,9 @@ import java.util.Scanner;
 /**
  * Created by 1 on 30.07.2018.
  */
-public class searchingFiles {
+public class SearchingFiles {
 
     static Scanner scanner = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<String>();
-        String[] extList = {".txt", ".html"};
-        System.out.println("Make auto-search or hand-search? ( type auto/hand )");
-        String choice = scanner.next();
-
-        if (choice.equals("auto")){
-
-            System.out.println("Make full scan? ( type yes/no )");
-            String scanChoice = scanner.next();
-            if (scanChoice.equals("no")){
-//                String path = "e:\\Games\\testFor\\";
-                String path;
-//                String path = "e:\\ ";
-                System.out.println("Enter the path like c:\\folder\\nextfolder\\");
-                path = scanner.next();
-                File str_dir = new File(path);
-                listOfFiles(str_dir, extList);
-
-
-            }else if(scanChoice.equals("yes")){
-//                getComputerInfo();
-                File[] pathDisc = getDiscList();
-                for (File path : pathDisc){
-                    System.out.println("From disc" + path);
-                    listOfFiles(path, extList);
-                }
-            }
-
-        }
-        else if (choice.equals("hand")){
-            fileChoose();
-        }
-
-
-    }
 
     public static void listOfFiles(File str_dir, String[] extList){
 
@@ -113,15 +76,6 @@ public class searchingFiles {
         return result;
     }
 
-    public static void fileChoose(){
-        JFileChooser chooser = new JFileChooser();
-
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-            File selectedFile = chooser.getSelectedFile();
-            String name = selectedFile.getName();
-            System.out.println("You choose the file with name " + name);
-        }
-    }
 
     public static File[] getDiscList() {
         File[] path = File.listRoots();

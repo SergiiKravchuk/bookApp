@@ -30,12 +30,8 @@ public class Main {
 
 
         }else if(scanChoice.equals("yes")){
-//            getComputerInfo();
-            File[] pathDisc = search.getDiscList();
-            for (File path : pathDisc){
-                System.out.println("From disc" + path);
-                search.listOfFiles(path, extList);
-            }
+            search.getComputerInfo();
+            search.fullSearching(extList);
         }
 
 

@@ -13,8 +13,6 @@ import java.util.Scanner;
  */
 public class SearchingFiles {
 
-    static Scanner scanner = new Scanner(System.in);
-
     public static void listOfFiles(File str_dir, String[] extList){
 
         List<String> list = new ArrayList<String>();
@@ -32,16 +30,20 @@ public class SearchingFiles {
 
     public static void getComputerInfo(){
         File[] pathDisk;
-        FileSystemView systemView = FileSystemView.getFileSystemView();
-
         pathDisk = File.listRoots();
 
-        for (File path : pathDisk){
-            System.out.println("Drives " + path);
-            System.out.println("Description " + systemView.getSystemTypeDescription(path));
+        System.out.println("Drives: ");
 
-            System.out.println("Adds");
-            System.out.println(systemView.getSystemDisplayName(path));
+        for (File path : pathDisk){
+            System.out.println(path);
+        }
+    }
+
+    public static void fullSearching(String[] extList){
+        File[] pathDisc = getDiscList();
+        for (File path : pathDisc){
+            System.out.println("From disc " + path);
+            listOfFiles(path, extList);
         }
     }
 

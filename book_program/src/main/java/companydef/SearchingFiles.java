@@ -74,6 +74,7 @@ public class SearchingFiles {
                 }
             }
             dirList.removeFirst();
+
         }
         return result;
     }
@@ -83,4 +84,6 @@ public class SearchingFiles {
         File[] path = File.listRoots();
         return path;
     }
+
+
 }

@@ -17,12 +17,7 @@ public class Searching extends SimpleFileVisitor<Path> {
 
     private int numOfMatches = 0;
     private PathMatcher matcher;
-
-    public void tet(){
-        PathMatcher numOfMatcher =
-                FileSystems.getDefault().getPathMatcher("glob:*.{txt,html}");
-    }
-
+    
     Searching (){
         matcher = FileSystems.getDefault().getPathMatcher("glob:*.{txt,html}");
     }

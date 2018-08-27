@@ -11,30 +11,67 @@ import java.util.Map;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
-//e:\Games\testFor\
-public class Searcher extends SimpleFileVisitor<Path>{
-    private List<Path> listOfFiles = new LinkedList<>();
-    private static Map<Path, IOException> accessError = new HashMap<>();
 
-    private int numOfMatches = 0;
+public class Searcher {
+
     private PathMatcher matcher;
-    private FileSearcherErrorHandler handler;
 
-    Searcher (Path startDir, List<String> exList)throws IOException{
-
+    Searcher(List<String> exList){
         String fileExtend = getPattern(exList);
 
+        matcher = FileSystems.getDefault().getPathMatcher("glob:" + fileExtend);
+    }
+
+    public List<Path> start(Path startDir) throws IOException{
+        MyFileVisitor visitor = new MyFileVisitor(startDir, matcher);
+        visitor.prepare();
+        return visitor.getListOfFiles();
+    }
+
+    private String getPattern(List<String> exList){
+        String pattern = "*.{";
+
+        pattern += String.join(",", exList);
+
+        pattern += "}";
+        System.out.println(pattern);
+        return pattern;
+    }
+
+}
+
+//MyFileVisitor
+
+class MyFileVisitor extends SimpleFileVisitor<Path>{
+
+    private PathMatcher matcher;
+    private Path startDir;
+
+    private FileSearcherErrorHandler handler;
+    private int numOfMatches = 0;
+    private List<Path> listOfFiles = new LinkedList<>();
+    private Map<Path, IOException> accessError = new HashMap<>();
+
+    MyFileVisitor(Path startDir, PathMatcher matcher) {
+        this.matcher = matcher;
+        this.startDir = startDir;
+
         handler = (filePath, fileExc) -> {
-            System.out.println(filePath);
+            System.out.println("Access denied: " + filePath);
             accessError.put(filePath, fileExc);
         };
 
-        matcher = FileSystems.getDefault().getPathMatcher("glob:" + fileExtend);
-
-        Files.walkFileTree(startDir, this);
-
     }
 
+    public void prepare()throws IOException{
+        Files.walkFileTree(startDir, this);
+    }
+    public List<Path> getListOfFiles(){
+        return listOfFiles;
+    }
+    public Map getAccessError(){
+        return accessError;
+    }
 
     private void search(Path file){
         Path name = file.getFileName();
@@ -45,72 +82,24 @@ public class Searcher extends SimpleFileVisitor<Path>{
             System.out.println("Found: " + file);
             listOfFiles.add(file);
         }
-    }
 
-    private String getPattern(List<String> exList){
-        String pattern = "*.{";
-        for (String str : exList){
-
-            if (str.equals(exList.get(exList.size()-1))){
-                pattern += str;
-            }else{
-                pattern += str + ",";
-            }
-        }
-        pattern += "}";
-        System.out.println(pattern);
-        return pattern;
-    }
-
-    public void count(){
-        System.out.println("Number of matches " + numOfMatches);
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         search(file);
         return CONTINUE;
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) {
-//        adding to map
-
-//        handler = (filePath, fileExc) -> {
-//            System.out.println(filePath);
-//            accessError.put(filePath, fileExc);
-//        };
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
         handler.handle(file, exc);
 
         return CONTINUE;
     }
 
+}
 
-
-    public List<Path> getListOfFiles() {
-        return listOfFiles;
-    }
-
-    public File[] getComputerInfo(){
-        File[] drivePath;
-        drivePath = File.listRoots();
-
-        System.out.println("Drives: ");
-
-        for (File path : drivePath){
-            System.out.println(path);
-        }
-        return drivePath;
-    }
-
-    interface FileSearcherErrorHandler{
-        void handle(Path file, IOException exc);
-    }
-
-//    test
-    public static void show(){
-        for (Path p : accessError.keySet()){
-            System.out.println(p);
-        }
-    }
+interface FileSearcherErrorHandler{
+    void handle(Path file, IOException exc);
 }

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ import java.util.Scanner;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         System.out.println("SearcherNIO");
         List<String> exList = new ArrayList<>();
         System.out.println("Enter the path of start directory" +
@@ -29,11 +30,13 @@ public class Main {
                 exList.add(ex);
             }
         }
-//        String[] exList = new String[5];
-        new Searcher(Paths.get(startPath), exList);
 
-        System.out.println("HEre the bad files" );
-        Searcher.show();
+        List<Path> listOfFiles = new LinkedList<>();
+
+        Searcher searcher = new Searcher(exList);
+        listOfFiles = searcher.start(Paths.get(startPath));
+
+
 
     }
 }

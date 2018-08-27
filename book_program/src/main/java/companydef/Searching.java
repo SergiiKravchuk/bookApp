@@ -17,7 +17,7 @@ public class Searching extends SimpleFileVisitor<Path> {
 
     private int numOfMatches = 0;
     private PathMatcher matcher;
-    
+
     Searching (){
         matcher = FileSystems.getDefault().getPathMatcher("glob:*.{txt,html}");
     }
@@ -38,7 +38,7 @@ public class Searching extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
         search(file);
         return CONTINUE;
     }
@@ -52,8 +52,15 @@ public class Searching extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
         System.err.println("Access denied in: " + file);
+//        System.out.println(exc);   can add 'grant' to policy
+
+//        skip catalog if it unavailable to scan
+//        return SKIP_SUBTREE;
+
         return CONTINUE;
     }
+
+
 
     public List<Path> getListOfFiles() {
         return listOfFiles;

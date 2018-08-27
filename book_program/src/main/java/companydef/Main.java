@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,38 +15,25 @@ import java.util.Scanner;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException{
-        List<Path> listOfFiles;
-        String choice;
-        String userPath;
-        Searching searchFiles = new Searching();
-        System.out.println("Make full scan? ( type yes/no )");
-        choice = scanner.next();
-        if(choice.equals("no")){
-            System.out.println("Enter the path for search (like c:\\folder\\nextfolder\\)");
-            userPath = scanner.next();
-            Path startDir = Paths.get(userPath);
-            Files.walkFileTree(startDir,searchFiles);
-            searchFiles.count();
-            listOfFiles = searchFiles.getListOfFiles();
-            showList(listOfFiles);
-
-
-        }else if(choice.equals("yes")){
-            File[] drivePath = searchFiles.getComputerInfo();
-            Path path;
-            for (File value : drivePath){
-                path = value.toPath();
-                Files.walkFileTree(path, searchFiles);
+    public static void main(String[] args) throws IOException {
+        System.out.println("SearcherNIO");
+        List<String> exList = new ArrayList<>();
+        System.out.println("Enter the path of start directory" +
+                           " (like c:\\folder\\nextFolder)");
+        String startPath = scanner.next();
+        String ex = "";
+        System.out.println("Enter the extends of files");
+        while (!ex.equals("ok")){
+            ex = scanner.next();
+            if(!ex.equals("ok")) {
+                exList.add(ex);
             }
-
         }
+//        String[] exList = new String[5];
+        new Searcher(Paths.get(startPath), exList);
 
-    }
+        System.out.println("HEre the bad files" );
+        Searcher.show();
 
-    private static void showList(List<Path> list){
-        for (Path path : list){
-            System.out.println(path);
-        }
     }
 }

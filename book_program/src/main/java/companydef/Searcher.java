@@ -23,6 +23,12 @@ public class Searcher extends SimpleFileVisitor<Path>{
     Searcher (Path startDir, List<String> exList)throws IOException{
 
         String fileExtend = getPattern(exList);
+
+        handler = (filePath, fileExc) -> {
+            System.out.println(filePath);
+            accessError.put(filePath, fileExc);
+        };
+
         matcher = FileSystems.getDefault().getPathMatcher("glob:" + fileExtend);
 
         Files.walkFileTree(startDir, this);
@@ -70,10 +76,11 @@ public class Searcher extends SimpleFileVisitor<Path>{
     public FileVisitResult visitFileFailed(Path file, IOException exc) {
 //        adding to map
 
-        handler = (filePath, fileExc) -> {
-            System.out.println(filePath);
-            accessError.put(filePath, fileExc);
-        };
+//        handler = (filePath, fileExc) -> {
+//            System.out.println(filePath);
+//            accessError.put(filePath, fileExc);
+//        };
+        handler.handle(file, exc);
 
         return CONTINUE;
     }

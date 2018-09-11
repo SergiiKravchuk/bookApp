@@ -1,12 +1,10 @@
 package companydef;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,10 +29,23 @@ public class Main {
             }
         }
 
-        List<Path> listOfFiles = new LinkedList<>();
+        List<Path> listOfFiles = new ArrayList<>();
 
         Searcher searcher = new Searcher(exList);
-        listOfFiles = searcher.start(Paths.get(startPath));
+//        searcher.setErrorHandler((filePath, fileExc) -> {
+//           System.out.println("Access denied: " + filePath);
+////           user choice about file
+//           return FileVisitResult.CONTINUE;
+//                });
+        searcher.setErrorHandler(new FileSearcherErrorHandler() {
+            @Override
+            public FileVisitResult handle(Path file, IOException exc) {
+//                .....
+                System.out.println("new hand method");
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        listOfFiles = searcher.preparation(Paths.get(startPath));
 
 
 

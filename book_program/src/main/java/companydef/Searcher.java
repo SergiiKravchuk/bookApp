@@ -1,13 +1,9 @@
 package companydef;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
@@ -15,20 +11,23 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 public class Searcher {
 
     private PathMatcher matcher;
+//    ???????????new FileSearcherErrorHandler....
+    private FileSearcherErrorHandler handler = new FileSearcherErrorHandler(){};
 
-    Searcher(List<String> exList){
+    Searcher(List<String> exList) {
         String fileExtend = getPattern(exList);
 
         matcher = FileSystems.getDefault().getPathMatcher("glob:" + fileExtend);
     }
 
-    public List<Path> start(Path startDir) throws IOException{
-        MyFileVisitor visitor = new MyFileVisitor(startDir, matcher);
-        visitor.prepare();
+    public List<Path> preparation(Path startDir) throws IOException {
+        SimpleHandler visitor = new SimpleHandler(startDir, matcher, handler);
+        visitor.search();
+
         return visitor.getListOfFiles();
     }
 
-    private String getPattern(List<String> exList){
+    private String getPattern(List<String> exList) {
         String pattern = "*.{";
 
         pattern += String.join(",", exList);
@@ -38,68 +37,59 @@ public class Searcher {
         return pattern;
     }
 
-}
+    void setErrorHandler(FileSearcherErrorHandler handler) {
 
-//MyFileVisitor
-
-class MyFileVisitor extends SimpleFileVisitor<Path>{
-
-    private PathMatcher matcher;
-    private Path startDir;
-
-    private FileSearcherErrorHandler handler;
-    private int numOfMatches = 0;
-    private List<Path> listOfFiles = new LinkedList<>();
-    private Map<Path, IOException> accessError = new HashMap<>();
-
-    MyFileVisitor(Path startDir, PathMatcher matcher) {
-        this.matcher = matcher;
-        this.startDir = startDir;
-
-        handler = (filePath, fileExc) -> {
-            System.out.println("Access denied: " + filePath);
-            accessError.put(filePath, fileExc);
-        };
-
+        this.handler = Objects.requireNonNull(handler);
     }
 
-    public void prepare()throws IOException{
-        Files.walkFileTree(startDir, this);
-    }
-    public List<Path> getListOfFiles(){
-        return listOfFiles;
-    }
-    public Map getAccessError(){
-        return accessError;
-    }
+    private class SimpleHandler extends SimpleFileVisitor<Path> {
 
-    private void search(Path file){
-        Path name = file.getFileName();
-        if(name != null && matcher.matches(name)){
-            numOfMatches++;
-//            System.out.println("File found " + file);
-//            add found files in list
-            System.out.println("Found: " + file);
-            listOfFiles.add(file);
+        private PathMatcher matcher;
+        private Path startDir;
+
+        private FileSearcherErrorHandler handler;
+        private int numOfMatches = 0;
+        private List<Path> listOfFiles = new ArrayList<>();
+
+        SimpleHandler(Path startDir, PathMatcher matcher, FileSearcherErrorHandler handler) {
+            this.matcher = matcher;
+            this.startDir = startDir;
+
+            this.handler = handler;
+        }
+
+        public void search() throws IOException {
+            Files.walkFileTree(startDir, this);
+        }
+
+        public List<Path> getListOfFiles() {
+            return listOfFiles;
+        }
+
+        private void search(Path file) {
+            Path name = file.getFileName();
+            if (name != null && matcher.matches(name)) {
+                numOfMatches++;
+                System.out.println("Found: " + file);
+//                add found files in list
+                listOfFiles.add(file);
+            }
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            search(file);
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            handler.handle(file, exc);
+
+//        return CONTINUE;
+            return handler.handle(file, exc);
         }
 
     }
-
-    @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        search(file);
-        return CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-        handler.handle(file, exc);
-
-        return CONTINUE;
-    }
-
 }
 
-interface FileSearcherErrorHandler{
-    void handle(Path file, IOException exc);
-}

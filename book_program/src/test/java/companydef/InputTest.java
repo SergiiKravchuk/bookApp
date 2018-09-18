@@ -1,6 +1,7 @@
 package companydef;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -39,12 +40,7 @@ public class InputTest {
         expFiles.add(Paths.get("e:\\Games\\testFor\\second\\third\\AvaS.txt"));
         expFiles.add(Paths.get("e:\\Games\\testFor\\second\\third\\test.txt"));
 
-
-        if(listOfFiles.containsAll(expFiles)){
-            Assert.assertTrue(true);
-        }else {
-            Assert.assertTrue(false);
-        }
+        Assert.assertTrue(listOfFiles.containsAll(expFiles));
 
     }
 

@@ -11,24 +11,34 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 public class Searcher {
 
     private PathMatcher matcher;
-//    ???????????new FileSearcherErrorHandler....
-    private FileSearcherErrorHandler handler = new FileSearcherErrorHandler(){};
+
+    private FileSearcherErrorHandler handler = new DefaultFileSeacherErrorHandler();
 
     Searcher(List<String> exList) {
         String fileExtend = getPattern(exList);
 
-        matcher = FileSystems.getDefault().getPathMatcher("glob:" + fileExtend);
+        matcher = FileSystems.getDefault().getPathMatcher(fileExtend);
     }
 
-    public List<Path> preparation(Path startDir) throws IOException {
-        SimpleHandler visitor = new SimpleHandler(startDir, matcher, handler);
-        visitor.search();
+    public List<Path> search(Path startDir){
+//        adds
+        try {
+            if (Files.exists(startDir)) {
+                SimpleHandler visitor = new SimpleHandler(startDir, matcher, handler);
+                visitor.search();
 
-        return visitor.getListOfFiles();
+                return visitor.getListOfFiles();
+            } /*else {
+                return null;
+            }*/
+        }catch (IOException ex){
+            System.out.println(ex);
+        }
+        return null;
     }
 
-    private String getPattern(List<String> exList) {
-        String pattern = "*.{";
+    /*private*/ String getPattern(List<String> exList) {
+        String pattern = "glob:*.{";
 
         pattern += String.join(",", exList);
 
@@ -39,7 +49,7 @@ public class Searcher {
 
     void setErrorHandler(FileSearcherErrorHandler handler) {
 
-        this.handler = Objects.requireNonNull(handler);
+        this.handler = Objects.requireNonNull(handler, "Handler must be not null");
     }
 
     private class SimpleHandler extends SimpleFileVisitor<Path> {
@@ -48,7 +58,7 @@ public class Searcher {
         private Path startDir;
 
         private FileSearcherErrorHandler handler;
-        private int numOfMatches = 0;
+
         private List<Path> listOfFiles = new ArrayList<>();
 
         SimpleHandler(Path startDir, PathMatcher matcher, FileSearcherErrorHandler handler) {
@@ -66,27 +76,23 @@ public class Searcher {
             return listOfFiles;
         }
 
-        private void search(Path file) {
+        private boolean isMatch(Path file) {
             Path name = file.getFileName();
-            if (name != null && matcher.matches(name)) {
-                numOfMatches++;
-                System.out.println("Found: " + file);
-//                add found files in list
-                listOfFiles.add(file);
-            }
+            return name != null && matcher.matches(name);
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-            search(file);
+            if(isMatch(file)){
+                System.out.println("Found: " + file);
+
+                listOfFiles.add(file);
+            }
             return CONTINUE;
         }
 
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
-            handler.handle(file, exc);
-
-//        return CONTINUE;
             return handler.handle(file, exc);
         }
 

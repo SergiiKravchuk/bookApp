@@ -12,13 +12,13 @@ import java.util.Scanner;
  * Created by 1 on 07.08.2018.
  */
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException{
         System.out.println("SearcherNIO");
         List<String> exList = new ArrayList<>();
         System.out.println("Enter the path of start directory" +
                            " (like c:\\folder\\nextFolder)");
+        final Scanner scanner = new Scanner(System.in);
         String startPath = scanner.next();
         String ex = "";
         System.out.println("Enter the extends of files");
@@ -32,20 +32,13 @@ public class Main {
         List<Path> listOfFiles = new ArrayList<>();
 
         Searcher searcher = new Searcher(exList);
-//        searcher.setErrorHandler((filePath, fileExc) -> {
-//           System.out.println("Access denied: " + filePath);
-////           user choice about file
-//           return FileVisitResult.CONTINUE;
-//                });
-        searcher.setErrorHandler(new FileSearcherErrorHandler() {
-            @Override
-            public FileVisitResult handle(Path file, IOException exc) {
-//                .....
-                System.out.println("new hand method");
-                return FileVisitResult.CONTINUE;
-            }
+        searcher.setErrorHandler((filePath, fileExc) -> {
+           System.out.println("Access denied: " + filePath);
+//           user choice about file
+           return FileVisitResult.CONTINUE;
         });
-        listOfFiles = searcher.preparation(Paths.get(startPath));
+
+        listOfFiles = searcher.search(Paths.get(startPath));
 
 
 

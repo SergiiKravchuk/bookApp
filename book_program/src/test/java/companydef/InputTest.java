@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,21 +28,26 @@ public class InputTest {
     @Test
     public void foundFilesTest()throws IOException{
         List<Path> listOfFiles;
+        List<Path> listOfNames = new LinkedList<>();
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
-        String startPath = "e:\\Games\\testFor\\";
+        String startPath = "src\\test\\resources";
+        System.out.println(Paths.get(startPath));
 
         listOfFiles = searcher.search(Paths.get(startPath));
+        for(Path tmp: listOfFiles){
+            listOfNames.add(tmp.getFileName());
+        }
 
         List<Path> expFiles = new ArrayList<>();
 
-        expFiles.add(Paths.get("e:\\Games\\testFor\\files viewmodel.txt"));
-        expFiles.add(Paths.get("e:\\Games\\testFor\\text.txt"));
-        expFiles.add(Paths.get("e:\\Games\\testFor\\second\\ex 4.txt"));
-        expFiles.add(Paths.get("e:\\Games\\testFor\\second\\fourth\\testHT.html"));
-        expFiles.add(Paths.get("e:\\Games\\testFor\\second\\third\\AvaS.txt"));
-        expFiles.add(Paths.get("e:\\Games\\testFor\\second\\third\\test.txt"));
-
-        Assert.assertTrue(listOfFiles.containsAll(expFiles));
+        expFiles.add(Paths.get("files viewmodel.txt"));
+        expFiles.add(Paths.get("text.txt"));
+        expFiles.add(Paths.get("ex 4.txt"));
+        expFiles.add(Paths.get("testHT.html"));
+        expFiles.add(Paths.get("AvaS.txt"));
+        expFiles.add(Paths.get("test.txt"));
+        
+        Assert.assertTrue(listOfNames.containsAll(expFiles));
 
     }
 

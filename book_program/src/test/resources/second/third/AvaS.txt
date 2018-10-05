@@ -1,0 +1,141 @@
+#include<stdio.h>
+#include<graphics.h>
+#include<math.h>
+#define ROUND(a)((int)(a+0.5))
+struct point
+{
+ int x,y;
+}pol[10];
+int n;
+void DDA(int,int,int,int);
+void Bresenham(int,int,int,int);
+void readpoly()
+{
+ int i;
+ for(i=0;i<n;i++)
+ {
+  printf("\nEnter the %d co=ordinates ",i+1);
+  scanf("%d%d",&pol[i].x,&pol[i].y);
+ }
+}
+void drawpolygonDDA()
+{
+ int i;
+ for(i=0;i<n;i++)
+  DDA(pol[i].x,pol[i].y,pol[(i+1)%n].x,pol[(i+1)%n].y);
+}
+void drawpolygonBres()
+{
+ int i;
+ for(i=0;i<n;i++)
+ {
+  delay(500);
+  Bresenham(pol[i].x,pol[i].y,pol[(i+1)%n].x,pol[(i+1)%n].y);
+ }
+}
+int main()
+{
+ int xa,ya,xb,yb,choice;
+ int gd=DETECT;
+ int gm;
+ printf("\nEnter the no of sides ");
+ scanf("%d",&n);
+ readpoly();
+ initgraph(&gd,&gm,NULL);
+ printf("Press any key to draw traingle using Bresenham Midpoint line drawing algortihm over the triangle drawn using DDA line drawing algorithm");
+ drawpolygonDDA();
+ getch();
+ drawpolygonBres();
+ while (!kbhit());
+ closegraph();
+ return 0;
+}
+void DDA(int xa,int ya,int xb,int yb)
+{
+ int dx,dy,steps,k;
+ dx=xb-xa;
+ dy=yb-ya;
+ float x=xa,y=ya,xinc,yinc;
+ if(abs(dx)>abs(dy))
+  steps=abs(dx);
+ else
+  steps=abs(dy);
+ xinc=dx/(float)steps;
+ yinc=dy/(float)steps;
+ putpixel(ROUND(x),ROUND(y),5);
+ for(k=0;k<steps;k++)
+ {
+  x+=xinc;
+  y+=yinc;
+  putpixel(ROUND(x),ROUND(y),5);
+ }
+}
+void Bresenham(int xa,int ya,int xb,int yb)
+{
+ int dx=xb-xa,dy=yb-ya,p,twod,twodd;
+ float m=2;
+ if(dx!=0)
+  m=(float)dy/(float)dx;
+ if(m>=-1&&m<=1)
+ {
+  if(xa>xb)
+  {
+   Bresenham(xb,yb,xa,ya);
+   return;
+  }
+  if(dy<0)
+  {
+    m=-1;
+       dy=-dy;
+  }
+  else
+     m=1;
+  putpixel(xa,ya,10);
+  p=2*dy-dx;
+  twod=2*dy;
+  twodd=2*dy-2*dx;
+  while(xa<xb)
+  {
+   xa++;
+   if(p<0)
+    p+=twod;
+   else
+   {
+    ya+=m;
+    p+=twodd;
+   }
+   putpixel(xa,ya,10);
+  }
+ }
+ else
+ {
+  if(ya>yb)
+  {
+   Bresenham(xb,yb,xa,ya);
+   return;
+  }
+  if(dx<0)
+   {
+       m=-1;
+       dx=-dx;
+    }
+  else
+     m=1;
+  putpixel(xa,ya,10);
+  p=2*dx-dy;
+  twod=2*dx;
+  twodd=2*dx-2*dy;
+  while(ya<yb)
+  {
+   ya++;
+   if(p<0)
+    p+=twod;
+   else
+   {
+    xa+=m;
+    p+=twodd;
+   }
+   putpixel(xa,ya,10);
+  }
+ }
+}

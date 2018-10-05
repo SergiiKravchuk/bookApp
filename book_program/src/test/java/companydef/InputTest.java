@@ -33,7 +33,7 @@ public class InputTest {
         listOfFiles = searcher.search(Paths.get(startPath));
 
         List<Path> expFiles = new ArrayList<>();
-//
+
         expFiles.add(Paths.get("e:\\Games\\testFor\\files viewmodel.txt"));
         expFiles.add(Paths.get("e:\\Games\\testFor\\text.txt"));
         expFiles.add(Paths.get("e:\\Games\\testFor\\second\\ex 4.txt"));
@@ -61,7 +61,6 @@ public class InputTest {
     public void handlerTest(){
             Searcher searcher = new Searcher(new ArrayList<>());
         searcher.setErrorHandler(null);
-//        Assert.assertEquals(null, searcher.setErrorHandler(null));
 
     }
 
@@ -73,7 +72,6 @@ public class InputTest {
 
         listOfFiles = searcher.search(Paths.get(startDir));
 
-//        Assert.assertEquals(null, listOfFiles);
         Assert.assertNull(listOfFiles);
     }
 

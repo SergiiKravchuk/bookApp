@@ -5,6 +5,7 @@ import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,7 @@ public class InputTest {
     }
 
     @Test
-    public void foundFilesTest(){
+    public void foundFilesTest()throws IOException{
         List<Path> listOfFiles;
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
         String startPath = "e:\\Games\\testFor\\";
@@ -44,35 +45,36 @@ public class InputTest {
 
     }
 
-
+//  can be deleted
     @Ignore
-    @Test
-    public void pathTest(){
+    @Test(expected = FileNotFoundException.class)
+    public void pathTest()throws IOException{
         List<Path> listOfFiles = new ArrayList<>();
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
 
         listOfFiles = searcher.search(null);
 
+
     }
 
-    @Ignore
-    @Test
-    public void xd(){
+    @Test(expected = NullPointerException.class)
+    public void handlerTest(){
             Searcher searcher = new Searcher(new ArrayList<>());
         searcher.setErrorHandler(null);
-//        Assert.assertEquals(new NullPointerException(), searcher.setErrorHandler(null));
+//        Assert.assertEquals(null, searcher.setErrorHandler(null));
 
     }
 
-    @Test
-    public void pathExistTest(){
+    @Test(expected = FileNotFoundException.class)
+    public void pathExistTest()throws IOException{
         List<Path> listOfFiles;
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
         String startDir = "e:\\Fotos\\";
 
         listOfFiles = searcher.search(Paths.get(startDir));
 
-        Assert.assertEquals(null, listOfFiles);
+//        Assert.assertEquals(null, listOfFiles);
+        Assert.assertNull(listOfFiles);
     }
 
 

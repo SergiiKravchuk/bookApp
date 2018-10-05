@@ -1,5 +1,6 @@
 package companydef;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -12,7 +13,7 @@ public class Searcher {
 
     private PathMatcher matcher;
 
-    private FileSearcherErrorHandler handler = new DefaultFileSeacherErrorHandler();
+    private FileSearcherErrorHandler handler = new DefaultFileSearcherErrorHandler();
 
     Searcher(List<String> exList) {
         String fileExtend = getPattern(exList);
@@ -20,24 +21,20 @@ public class Searcher {
         matcher = FileSystems.getDefault().getPathMatcher(fileExtend);
     }
 
-    public List<Path> search(Path startDir){
+    public List<Path> search(Path startDir)throws IOException{
 //        adds
-        try {
             if (Files.exists(startDir)) {
                 SimpleHandler visitor = new SimpleHandler(startDir, matcher, handler);
                 visitor.search();
 
                 return visitor.getListOfFiles();
-            } /*else {
-                return null;
-            }*/
-        }catch (IOException ex){
-            System.out.println(ex);
-        }
-        return null;
+            }else {
+                throw new FileNotFoundException();
+
+            }
     }
 
-    /*private*/ String getPattern(List<String> exList) {
+    protected String getPattern(List<String> exList) {
         String pattern = "glob:*.{";
 
         pattern += String.join(",", exList);

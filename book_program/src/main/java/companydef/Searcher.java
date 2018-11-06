@@ -1,5 +1,8 @@
 package companydef;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
@@ -11,9 +14,10 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class Searcher {
 
+    static Logger logger = LoggerFactory.getLogger(Main.class);
     private PathMatcher matcher;
 
-    private FileSearcherErrorHandler handler = new DefaultFileSearcherErrorHandler();
+    private FileSearcherErrorHandler errorHandler = new DefaultFileSearcherErrorHandler();
 
     Searcher(List<String> exList) {
         String fileExtend = getPattern(exList);
@@ -24,7 +28,7 @@ public class Searcher {
     public List<Path> search(Path startDir)throws IOException{
 //        adds
             if (Files.exists(startDir)) {
-                SimpleHandler visitor = new SimpleHandler(startDir, matcher, handler);
+                SimpleHandler visitor = new SimpleHandler(startDir, matcher, errorHandler);
                 visitor.search();
 
                 return visitor.getListOfFiles();
@@ -44,9 +48,9 @@ public class Searcher {
         return pattern;
     }
 
-    void setErrorHandler(FileSearcherErrorHandler handler) {
+    void setErrorHandler(FileSearcherErrorHandler errorHandler) {
 
-        this.handler = Objects.requireNonNull(handler, "Handler must be not null");
+        this.errorHandler = Objects.requireNonNull(errorHandler, "Handler must be not null");
     }
 
     private class SimpleHandler extends SimpleFileVisitor<Path> {
@@ -54,15 +58,15 @@ public class Searcher {
         private PathMatcher matcher;
         private Path startDir;
 
-        private FileSearcherErrorHandler handler;
+        private FileSearcherErrorHandler errorHandler;
 
         private List<Path> listOfFiles = new ArrayList<>();
 
-        SimpleHandler(Path startDir, PathMatcher matcher, FileSearcherErrorHandler handler) {
+        SimpleHandler(Path startDir, PathMatcher matcher, FileSearcherErrorHandler errorHandler) {
             this.matcher = matcher;
             this.startDir = startDir;
 
-            this.handler = handler;
+            this.errorHandler = errorHandler;
         }
 
         public void search() throws IOException {
@@ -81,7 +85,8 @@ public class Searcher {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if(isMatch(file)){
-                System.out.println("Found: " + file);
+//                System.out.println("Found: " + file);
+                logger.info("Found: " + file );
 
                 listOfFiles.add(file);
             }
@@ -90,7 +95,7 @@ public class Searcher {
 
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
-            return handler.handle(file, exc);
+            return errorHandler.handle(file, exc);
         }
 
 

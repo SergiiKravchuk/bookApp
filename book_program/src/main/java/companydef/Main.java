@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 /**
  * Created by 1 on 07.08.2018.
  */
 public class Main {
 
     public static void main(String[] args) throws IOException{
+
+
+
         System.out.println("SearcherNIO");
         List<String> exList = new ArrayList<>();
         System.out.println("Enter the path of start directory" +

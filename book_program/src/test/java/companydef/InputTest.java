@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by 1 on 12.09.2018.
@@ -30,38 +31,32 @@ public class InputTest {
         List<Path> listOfFiles;
         List<Path> listOfNames = new LinkedList<>();
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
-        String startPath = "src\\test\\resources";
-        System.out.println(Paths.get(startPath));
+        ClassLoader classLoader = getClass().getClassLoader();
+        Path startPath = Paths.get(classLoader.getResource("src/test/resources").getPath());
 
-        listOfFiles = searcher.search(Paths.get(startPath));
-        for(Path tmp: listOfFiles){
-            listOfNames.add(tmp.getFileName());
+        listOfFiles = searcher.search(startPath).stream()
+        .map(startPath::relativize)
+        .collect(Collectors.toList());
+
+        for(Path file: listOfFiles){
+
+            System.out.println("file " + file);
+            listOfNames.add(startPath.relativize(file));
         }
-
         List<Path> expFiles = new ArrayList<>();
 
-        expFiles.add(Paths.get("files viewmodel.txt"));
-        expFiles.add(Paths.get("text.txt"));
-        expFiles.add(Paths.get("ex 4.txt"));
-        expFiles.add(Paths.get("testHT.html"));
-        expFiles.add(Paths.get("AvaS.txt"));
-        expFiles.add(Paths.get("test.txt"));
-        
+        final List<String> strings = Arrays.asList("files viewmodel.txt", "text.txt", "ex 4.txt",
+                "testHT.html", "AvaS.txt", "test.txt");
+
+        for (String path : strings){
+            expFiles.add(Paths.get(path));
+        }
+
         Assert.assertTrue(listOfNames.containsAll(expFiles));
 
-    }
-
-//  can be deleted
-    @Ignore
-    @Test(expected = FileNotFoundException.class)
-    public void pathTest()throws IOException{
-        List<Path> listOfFiles = new ArrayList<>();
-        final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
-
-        listOfFiles = searcher.search(null);
-
 
     }
+
 
     @Test(expected = NullPointerException.class)
     public void handlerTest(){
@@ -74,9 +69,10 @@ public class InputTest {
     public void pathExistTest()throws IOException{
         List<Path> listOfFiles;
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
-        String startDir = "e:\\Fotos\\";
 
-        listOfFiles = searcher.search(Paths.get(startDir));
+        String startFile = "add date";
+
+        listOfFiles = searcher.search(Paths.get(startFile));
 
         Assert.assertNull(listOfFiles);
     }

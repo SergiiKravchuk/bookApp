@@ -14,16 +14,42 @@ import java.util.Scanner;
  */
 public class Main {
 
+    private static List<Path> listOfFiles = new ArrayList<>();
+    private static List<String> exList = new ArrayList<>();
+    private static String startPath;
+
+
+    public Main(String startPath, List<String> exList){
+        this.startPath = startPath;
+        this.exList = exList;
+    }
+
+    public List<Path> getListOfFiles() {
+        return listOfFiles;
+    }
+
     public static void main(String[] args) throws IOException{
+        handInput();
+        startSearch();
+    }
 
+    public static void startSearch()throws IOException{
+        Searcher searcher = new Searcher(exList);
+        searcher.setErrorHandler((filePath, fileExc) -> {
+            System.out.println("Access denied: " + filePath);
+//           user choice about file
+            return FileVisitResult.CONTINUE;
+        });
 
+        listOfFiles = searcher.search(Paths.get(startPath));
+    }
 
+    public static void handInput(){
         System.out.println("SearcherNIO");
-        List<String> exList = new ArrayList<>();
         System.out.println("Enter the path of start directory" +
-                           " (like c:\\folder\\nextFolder)");
+                " (like c:\\folder\\nextFolder)");
         final Scanner scanner = new Scanner(System.in);
-        String startPath = scanner.next();
+        startPath = scanner.next();
         String ex = "";
         System.out.println("Enter the extends of files");
         while (!ex.equals("ok")){
@@ -32,19 +58,5 @@ public class Main {
                 exList.add(ex);
             }
         }
-
-        List<Path> listOfFiles = new ArrayList<>();
-
-        Searcher searcher = new Searcher(exList);
-        searcher.setErrorHandler((filePath, fileExc) -> {
-           System.out.println("Access denied: " + filePath);
-//           user choice about file
-           return FileVisitResult.CONTINUE;
-        });
-
-        listOfFiles = searcher.search(Paths.get(startPath));
-
-
-
     }
 }

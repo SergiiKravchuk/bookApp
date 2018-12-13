@@ -1,12 +1,11 @@
 package companydef;
 
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -27,22 +26,22 @@ public class InputTest {
     }
 
     @Test
-    public void foundFilesTest()throws IOException{
+    public void foundFilesTest()throws Exception{
         List<Path> listOfFiles;
-        List<Path> listOfNames = new LinkedList<>();
+        List<Path> listOfNames = new ArrayList<>();
         final Searcher searcher = new Searcher(Arrays.asList("txt", "html"));
         ClassLoader classLoader = getClass().getClassLoader();
-        Path startPath = Paths.get(classLoader.getResource("src/test/resources").getPath());
+        final URL resource = classLoader.getResource("");
+        Path startPath = Paths.get(resource.toURI());
 
-        listOfFiles = searcher.search(startPath).stream()
-        .map(startPath::relativize)
-        .collect(Collectors.toList());
+        listOfFiles = searcher.search(startPath);
 
         for(Path file: listOfFiles){
 
             System.out.println("file " + file);
-            listOfNames.add(startPath.relativize(file));
+            listOfNames.add(file.getFileName());
         }
+
         List<Path> expFiles = new ArrayList<>();
 
         final List<String> strings = Arrays.asList("files viewmodel.txt", "text.txt", "ex 4.txt",
@@ -51,10 +50,15 @@ public class InputTest {
         for (String path : strings){
             expFiles.add(Paths.get(path));
         }
-
         Assert.assertTrue(listOfNames.containsAll(expFiles));
 
+    }
 
+    public void showItems(List<Path> list){
+        for (Path p : list){
+            System.out.print(p + " ");
+        }
+        System.out.println();
     }
 
 

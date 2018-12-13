@@ -7,3 +7,4 @@ target/
 SearchingFiles.java
 Searching.java
 log4j.properties
+/META_INF/*

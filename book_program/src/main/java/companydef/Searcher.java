@@ -14,7 +14,7 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class Searcher {
 
-    static Logger logger = LoggerFactory.getLogger(Main.class);
+    static Logger logger = LoggerFactory.getLogger(SearchStarter.class);
     private PathMatcher matcher;
 
     private FileSearcherErrorHandler errorHandler = new DefaultFileSearcherErrorHandler();

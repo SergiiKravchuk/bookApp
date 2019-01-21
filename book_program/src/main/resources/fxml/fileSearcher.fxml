@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane fx:id="searchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="companydef.bookAppGUI.FileSearcher">
+   <center>
+      <ScrollPane prefHeight="367.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <content>
+            <ListView fx:id="filesView" prefHeight="341.0" prefWidth="397.0">
+               <opaqueInsets>
+                  <Insets left="50.0" />
+               </opaqueInsets>
+            </ListView>
+         </content>
+      </ScrollPane>
+   </center>
+   <bottom>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="327.0" minWidth="10.0" prefWidth="313.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="120.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="67.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="selectedExtension" prefHeight="25.0" prefWidth="196.0" />
+            <Button fx:id="btn_addToLibrary" mnemonicParsing="false" text="Add to Library" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Button>
+         </children>
+      </GridPane>
+   </bottom>
+   <right>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <CheckBox fx:id="cb_txt" layoutX="14.0" layoutY="43.0" mnemonicParsing="false" text=".txt" />
+            <CheckBox fx:id="cb_pdf" layoutX="83.0" layoutY="43.0" mnemonicParsing="false" text=".pdf" />
+            <CheckBox fx:id="cb_doc" layoutX="14.0" layoutY="73.0" mnemonicParsing="false" text=".doc" />
+            <Button fx:id="btn_search" layoutX="146.0" layoutY="214.0" mnemonicParsing="false" text="Search" />
+            <Label layoutX="9.0" layoutY="147.0" text="Start path:" />
+            <TextField fx:id="field_startPath" layoutX="9.0" layoutY="173.0" prefHeight="25.0" prefWidth="159.0" />
+            <Button fx:id="btn_startPath" layoutX="172.0" layoutY="173.0" mnemonicParsing="false" text="..." />
+            <ToggleButton fx:id="btn_enableAll" layoutX="14.0" layoutY="110.0" mnemonicParsing="false" text="Enable all" />
+            <Button fx:id="btn_test" layoutX="74.0" layoutY="291.0" mnemonicParsing="false" text="Button" />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>

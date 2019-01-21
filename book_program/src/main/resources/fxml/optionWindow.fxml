@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="companydef.bookAppGUI.OptionWindow">
+   <children>
+      <TabPane prefHeight="370.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Background">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ColorPicker fx:id="cbox_backColor" layoutX="120.0" layoutY="220.0" />
+                        <ComboBox fx:id="cbox_fontType" layoutX="69.0" layoutY="32.0" prefWidth="150.0" />
+                        <Label layoutX="22.0" layoutY="36.0" text="Font" />
+                        <Label layoutX="313.0" layoutY="36.0" text="Size" />
+                        <ComboBox fx:id="cbox_fontSize" layoutX="343.0" layoutY="32.0" prefHeight="25.0" prefWidth="69.0" />
+                        <ComboBox fx:id="cbox_textSpacing" layoutX="68.0" layoutY="146.0" prefWidth="150.0" />
+                        <Label layoutX="22.0" layoutY="150.0" text="Spacing" />
+                        <Label layoutX="22.0" layoutY="224.0" text="Background color" />
+                        <Label layoutX="22.0" layoutY="95.0" text="Padding" />
+                        <TextField fx:id="field_paddUp" layoutX="69.0" layoutY="91.0" prefHeight="25.0" prefWidth="47.0" promptText="Up" text="0" />
+                        <TextField fx:id="field_paddRight" layoutX="120.0" layoutY="91.0" prefHeight="25.0" prefWidth="47.0" promptText="Right" text="0" />
+                        <TextField fx:id="field_paddDown" layoutX="171.0" layoutY="91.0" prefHeight="25.0" prefWidth="47.0" promptText="Down" text="0" />
+                        <TextField fx:id="field_paddLeft" layoutX="222.0" layoutY="91.0" prefHeight="25.0" prefWidth="47.0" promptText="Left" text="0" />
+                        <ImageView fx:id="image_right" fitHeight="19.0" fitWidth="19.0" layoutX="134.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/cubeRight1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="image_up" fitHeight="19.0" fitWidth="19.0" layoutX="83.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/cubeUp1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="image_down" fitHeight="19.0" fitWidth="19.0" layoutX="185.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/cubeDown1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="image_left" fitHeight="19.0" fitWidth="19.0" layoutX="236.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/cubeLeft1.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="308.0" layoutY="224.0" text="Text color" />
+                        <ColorPicker fx:id="cbox_textColor" layoutX="367.0" layoutY="220.0" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Font">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <Button fx:id="btn_cancel" layoutX="534.0" layoutY="370.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="btn_apply" layoutX="474.0" layoutY="370.0" mnemonicParsing="false" text="Apply" />
+   </children>
+</AnchorPane>

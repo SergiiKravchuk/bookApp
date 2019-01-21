@@ -37,7 +37,6 @@ public class InputTest {
         listOfFiles = searcher.search(startPath);
 
         for(Path file: listOfFiles){
-
             System.out.println("file " + file);
             listOfNames.add(file.getFileName());
         }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="mainMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="companydef.bookAppGUI.MainMenu">
+    <bottom>
+        <HBox prefHeight="62.0" prefWidth="600.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <ScrollPane fx:id="bookPanel" prefHeight="219.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+    </center>
+   <top>
+      <VBox prefHeight="85.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar fx:id="menuBar">
+              <menus>
+                <Menu fx:id="menu_file" mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem fx:id="item_open" mnemonicParsing="false" text="Open" />
+                        <MenuItem fx:id="item_save" mnemonicParsing="false" text="Save" />
+                        <MenuItem fx:id="item_search" mnemonicParsing="false" text="Search" />
+                    <MenuItem fx:id="item_exit" mnemonicParsing="false" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu fx:id="menu_option" mnemonicParsing="false" text="Options">
+                  <items>
+                    <MenuItem fx:id="item_visuals" mnemonicParsing="false" text="Visuals" />
+                  </items>
+                </Menu>
+                <Menu fx:id="menu_help" mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem fx:id="item_about" mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <Label fx:id="choose" prefHeight="27.0" prefWidth="162.0" text="Label" />
+         </children>
+      </VBox>
+   </top>
+</BorderPane>

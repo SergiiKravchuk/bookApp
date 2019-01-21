@@ -11,7 +11,7 @@ import java.nio.file.Path;
  * Created by 1 on 11.09.2018.
  */
 public class DefaultFileSearcherErrorHandler implements FileSearcherErrorHandler {
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static Logger logger = LoggerFactory.getLogger(SearchStarter.class);
     @Override
     public FileVisitResult handle(Path file, IOException exc) {
 //        System.out.println("Access denied: " + file);

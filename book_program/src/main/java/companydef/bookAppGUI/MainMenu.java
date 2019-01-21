@@ -26,19 +26,15 @@ import java.util.Scanner;
 
 public class MainMenu implements ShelfFiller{
 
-//    String path = "E:/Загрузки/bookWitcher.jpg";
-    String path = "/resources/bookWitcher.jpg";
+
     ClassLoader classLoader = getClass().getClassLoader();
     public static String pathNoImage = "/image/noImage1.png";
-    Image img = new Image(path);
     public static Image imgNoImage;
 
-    List<ImageView> bookImage = new ArrayList<>();
     static List<String> books = new ArrayList<>();
     static ContextMenu contextMenu = new ContextMenu();
     static HBox booksPanel = new HBox();
     static boolean start = true;
-    int i = 0;
 
     static Stage primaryStage;
     public static int selectedIndex;
@@ -78,21 +74,11 @@ public class MainMenu implements ShelfFiller{
     private MenuItem item_about;
 
     @FXML
-    private HBox header;
-
-    @FXML
-    private Button btn_add;
-
-    @FXML
-    private Button btn_remove;
-
-    @FXML
     private Label choose;
 
     @FXML
     void initialize() {
 
-//        booksPanel = new HBox();
         pathNoImage = classLoader.getResource("noImage1.png").getPath();
         System.out.println("image " + pathNoImage);
         imgNoImage = new Image(pathNoImage);
@@ -108,59 +94,11 @@ public class MainMenu implements ShelfFiller{
             start = false;
         }
 
-        btn_add.setOnAction(event -> {
-
-            VBox bookTitle = new VBox();
-            ImageView imageView = new ImageView(img);
-            Button btn_book = new Button();
-
-            imageView.onMousePressedProperty().set(eventImage -> {
-                if (eventImage.getButton() == MouseButton.SECONDARY){
-                    choose.setText("Right button pressed");
-                    System.out.println(imageView.getParent().toString());
-//                    System.out.println("index " + bookPanel.getChildrenUnmodifiable().indexOf(imageView.getParent()));
-                    selectedIndex = booksPanel.getChildren().indexOf(imageView.getParent());
-                    System.out.println("index " + selectedIndex);
-                    contextMenu.show(imageView, eventImage.getScreenX(), eventImage.getScreenY());
-                }
-                else if (eventImage.getButton() == MouseButton.PRIMARY) {
-                    setnew();
-                    try {
-                        readScene(primaryStage);
-//                        bookInfo();
-                    } catch (Exception ex) {
-                        System.out.println("error: " + ex.getMessage());
-                    }
-                }
-
-            });
-            Label label = new Label("Here the title of the bookTitle " + i);
-            bookImage.add(imageView);
-            bookTitle.getChildren().add(imageView);
-            bookTitle.getChildren().add(label);
-
-            booksPanel.getChildren().add(bookTitle);
-
-            i++;
-
-        });
-
-        btn_remove.setOnAction(event -> {
-            int index = bookImage.size() - 1;
-            bookImage.remove(index);
-            booksPanel.getChildren().remove(index);
-
-        });
-
         bookPanel.setContent(booksPanel);
     }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
-    }
-
-    private void setnew(){
-        choose.setText("Was pressed");
     }
 
     private void initializeMenuBar(){
@@ -175,9 +113,7 @@ public class MainMenu implements ShelfFiller{
             choose.setText("open from menu bar");
             String file = BookFileChooser.fileChoose(primaryStage).toString();
             if (isEnable(file.substring(file.length() - 3))) {
-                System.out.println("main menu recivfile " + file);
                 if (!file.isEmpty()) {
-                    System.out.println("main menu " + file);
                     books.add(file);
                     InfoWindow.bookInfoList.add(new BookInfo("No information"));
                     ImageView imageView = fillShelf(file, MainMenu.booksPanel);

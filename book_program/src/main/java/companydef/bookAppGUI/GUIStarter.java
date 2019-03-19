@@ -16,26 +16,24 @@ public class GUIStarter extends Application{
     @Override
     public void start(Stage primaryStage){
         System.out.println("smth " + getClass().getResource("/fxml/mainScreenV1.01.fxml"));
+        System.out.println("smth " + getClass().getResource("mainScreenV1.01.fxml"));
         System.out.println("sec " + getClass().getResourceAsStream("/fxml/mainScreenV1.01.fxml"));
 
         try {
-            InputStream stream = getClass().getResourceAsStream("/fxml/mainScreenV1.01.fxml");
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainScreenV1.01.fxml"));
-//            FXMLLoader loader = new FXMLLoader();
-//            Parent root = loader.load(stream);
+//            InputStream stream = getClass().getClassLoader().getResourceAsStream("/fxml/mainScreenV1.01.fxml");
+//            Parent root = new FXMLLoader().load(stream);
 
-            Parent root = new FXMLLoader().load(stream);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("/fxml/mainScreenV1.01.fxml"));
+            Parent root = loader.load();
 
             primaryStage.setTitle("BookApp");
             primaryStage.setScene(new Scene(root, 1200, 800));
 
-//            MainMenu controller = loader.getController();
-//            controller.setPrimaryStage(primaryStage);
-
             primaryStage.show();
 
         }catch (Exception ex){
-            System.out.println("error with GUI starter " + ex.getMessage() + " end" + ex.toString());
+            System.out.println("error with GUI starter " + ex.getMessage() + " end " + ex.toString());
         }
 
     }

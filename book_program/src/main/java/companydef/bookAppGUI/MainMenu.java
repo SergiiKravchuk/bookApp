@@ -28,7 +28,7 @@ public class MainMenu implements ShelfFiller{
 
 
     ClassLoader classLoader = getClass().getClassLoader();
-    public static String pathNoImage = "/image/noImage1.png";
+    public static String pathNoImage = "/images/noImage1.png";
     public static Image imgNoImage;
 
     static List<String> books = new ArrayList<>();
@@ -79,7 +79,7 @@ public class MainMenu implements ShelfFiller{
     @FXML
     void initialize() {
 
-        pathNoImage = classLoader.getResource("noImage1.png").getPath();
+        pathNoImage = classLoader.getResource(pathNoImage).toString();
         System.out.println("image " + pathNoImage);
         imgNoImage = new Image(pathNoImage);
 
